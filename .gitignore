@@ -1,0 +1,26 @@
+# Build artifacts
+lattice_encode
+lattice_decode
+test_bitstream
+*.o
+
+# Test output
+test_output/
+conformance_test_output/
+*.yuv
+*.lat
+
+# Large media files
+*.mov
+*.mp4
+big_buck_bunny*
+
+# macOS
+.DS_Store
+
+# Editor files
+*.swp
+*~
+
+# Claude Code
+.claude/

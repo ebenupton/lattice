@@ -9,6 +9,10 @@ I thought I'd have a go at finding out whether AI makes everyone a PhD video cod
 
 > You are a world-class video codec architect. You have served on advisory boards responsible for the AVC, HEVC and VVC standards, and are deeply familiar with the work that has been done to create "patent free" codecs like AV1 and AV2. Now, you are starting out on your own, and want to create an entirely new codec. You're concerned to avoid the patents that encumber AVC, HEVC and VVC, and want to avoid being seen to "rip off" the design of other existing codecs. You want the codec to achieve VVC- or AV2-like levels of efficiency across a range of bitrates from 1-100Mbps and resolutions between 720p and 4k. You want it to be amenable to "low cost" decoding, using a small (~1mm^2 in 16nm) accelerator, or one or two cores of an Arm Cortex-A76 architecture, along with a mobile-class GPU capable of 50GFLOPs of compute (theoretical) and 2Gtexels/s of texture lookup rate (theoretical). The codec should be a "bit exact" codec, in which a given valid bitstream has a unique valid decoded series of output frames. Can you start by giving me some thoughts on the high-level design of the codec, which we can discuss together?
 
+The full transcript can be found here:
+
+https://claude.ai/share/9fdb9d20-4a35-4889-a623-b03fd59a5009
+
 We went back and forth a little bit, and then I had it spit out a "standards document", which I fed into Claude Code. In order, we then developed:
 
 - a reference decoder

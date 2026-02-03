@@ -18,12 +18,15 @@ We went back and forth a little bit, and then I had it spit out a "standards doc
 - a complete encoder
 - a small test suite
 
-Next we: ground the bugs out of the encoder and decoder; buffed the encoder with some nice-to-have features (full RDO for block partitioning and mode choice, trellis-like squashing of isolated small coefficients, perceptual quality metrics); had a go at tuning the wacky CNN-based loop filter using PyTorch; and did a few rounds of iteration, writing "memos to the architecture team" to flush ambiguity out of the spec.
+Next we ground lots of bugs out of the encoder and decoder; buffed the encoder with some nice-to-have features (full RDO for block partitioning and mode choice, trellis-like squashing of isolated small coefficients, perceptual quality metrics); ran the codec off against JPEG and WebP for still images; had a go at tuning the wacky CNN-based loop filter using PyTorch; and did a few rounds of iteration on the spec, writing "memos to the architecture team" to flush out ambiguity.
 
 Things that didn't work perfectly out of the gate and required my input:
 
 - We ended up very dependent on the loop filter to recover losses due to the simplicity of the rest of the design. This may be an interesting approach, but Claude badly underestimated the complexity (9TFOPS vs the 50GFLOP budget), and the cut-down filter feels underpowered.
 - The initial proposal was to use texture filtering to implement sub-pel lookups, but this isn't sufficiently specified in the standards, which fights with the "bit exact" goal.
-- Claude missed that we needed to perceptually quantise the DCT coefficients
+- Claude missed that we needed to perceptually quantise the DCT coefficients. The initial draft was outperformed on perceptual quality by JPEG for still images despite reporting better PSNR.
+- Various minor misunderstandings, for example relating to whether motion compensation is applied to filtered or unfiltered prior frames.
 
- 
+Overall a solid result, with about eight hours of effort (and a lot of tokens) invested. Claude's hyperbolic claims to have developed a VVC-equivalent codec aside, we seem to have ended up with a sort of MPEG-1 on steroids: DCTs and half-pel bilinear filters for motion compensation, but with hierarchical block partitioning, a modern entropy encoding scheme, and a loop filter. The reference decoder pixel pipeline is about ~1k lines of quite readable C, plus a few hundred lines of bitstream parser and other support code.
+
+This was my first limited experience with the orchestration model of AI-assisted engineering, and I was quite pleased with how much I could get done in a short period of time. I think it helped that this problem lay at the intersection of three things the tools excel at: strip-mining the literature for concepts; translating between representations (structured natural language and code) while preserving meaning; and beating bugs out of matched pairs of programs (the encoder and decoder in this case). It was also helpful that I am a (lapsed) video codec engineer; while I'm not intimately familiar with the latest standards, I do know the shape of the problem quite well, and could provide detailed feedback during the requirements and specification phase. Next I might have a go at dropping a real standards document and set of test streams into Claude Code and see how far it can get in producing a conformant implementation.
